@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v1.0 | 21 juni 2026: Quiz WK25 (nieuwsweek 13 t/m 19 juni 2026) -->
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
@@ -79,40 +80,35 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent), #fbbf24);
+            background: var(--accent);
             border-radius: 2px;
-            transition: width 0.5s ease;
+            transition: width 0.3s ease;
             width: 0%;
         }
 
         .score-display {
-            text-align: center;
+            text-align: right;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
         }
-
-        .score-display span { color: var(--accent); font-weight: 700; }
 
         .question-card {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 2rem;
+            padding: 1.75rem;
             margin-bottom: 1.5rem;
-            transition: border-color 0.3s ease;
         }
-
-        .question-card.answered-correct { border-color: var(--correct); }
-        .question-card.answered-wrong { border-color: var(--wrong); }
 
         .question-number {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-muted);
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.08em;
             margin-bottom: 0.75rem;
         }
 
@@ -120,362 +116,354 @@
             font-size: 1.05rem;
             font-weight: 600;
             margin-bottom: 1.25rem;
-            color: var(--text);
+            line-height: 1.5;
         }
 
-        .options { display: flex; flex-direction: column; gap: 0.6rem; }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
 
         .option {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
+            gap: 0.85rem;
+            padding: 0.85rem 1.1rem;
+            background: var(--bg);
             border: 1px solid var(--border);
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            background: var(--bg);
+            transition: all 0.15s ease;
+            text-align: left;
+            width: 100%;
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
         }
 
-        .option:hover:not(.disabled) {
+        .option:hover:not(:disabled) {
+            background: var(--surface-hover);
             border-color: var(--accent);
-            background: var(--accent-glow);
+        }
+
+        .option-letter {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            min-width: 22px;
+            text-align: center;
+            padding: 0.2rem 0.4rem;
+            background: var(--border);
+            border-radius: 4px;
+            transition: all 0.15s ease;
         }
 
         .option.correct {
-            border-color: var(--correct);
             background: var(--correct-bg);
+            border-color: var(--correct);
+        }
+
+        .option.correct .option-letter {
+            background: var(--correct);
+            color: white;
         }
 
         .option.wrong {
-            border-color: var(--wrong);
             background: var(--wrong-bg);
+            border-color: var(--wrong);
         }
 
-        .option.disabled { cursor: default; }
-
-        .letter {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--accent);
-            min-width: 1.5rem;
+        .option.wrong .option-letter {
+            background: var(--wrong);
+            color: white;
         }
 
-        .feedback {
-            display: none;
+        .option:disabled { cursor: default; }
+
+        .explanation {
             margin-top: 1rem;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
+            padding: 0.9rem 1.1rem;
+            background: rgba(245, 158, 11, 0.08);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 6px 6px 0;
             font-size: 0.9rem;
+            color: var(--text-dim);
             line-height: 1.5;
+            display: none;
         }
 
-        .feedback.show { display: block; }
-        .feedback.correct-fb { background: var(--correct-bg); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .feedback.wrong-fb { background: var(--wrong-bg); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .explanation.visible { display: block; }
 
         .results {
             display: none;
             text-align: center;
+            padding: 3rem 2rem;
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 3rem 2rem;
+            border-radius: 16px;
             margin-top: 2rem;
         }
 
-        .results.show { display: block; }
-        .results h2 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent); }
+        .results.visible { display: block; }
 
-        .final-score {
+        .result-score {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 3rem;
+            font-size: 4rem;
             font-weight: 700;
             color: var(--accent);
-            margin: 1rem 0;
+            line-height: 1;
+            margin-bottom: 0.5rem;
         }
 
-        .message { color: var(--text-dim); font-size: 1rem; margin-bottom: 1.5rem; }
+        .result-label {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
 
-        .btn-restart {
+        .result-desc {
+            color: var(--text-dim);
+            max-width: 420px;
+            margin: 0 auto 2rem;
+        }
+
+        .result-link {
+            display: inline-block;
+            padding: 0.75rem 2rem;
             background: var(--accent);
             color: #000;
-            border: none;
-            padding: 0.75rem 2rem;
+            font-weight: 700;
             border-radius: 8px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: opacity 0.15s;
         }
 
-        .btn-restart:hover { opacity: 0.85; }
+        .result-link:hover { opacity: 0.85; }
 
         footer {
             text-align: center;
-            padding: 2rem 0 1rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
             color: var(--text-muted);
-            font-size: 0.8rem;
+            font-size: 0.82rem;
         }
 
         footer a { color: var(--accent); text-decoration: none; }
-
-        @media (max-width: 600px) {
-            .container { padding: 1rem; }
-            header h1 { font-size: 1.5rem; }
-            .question-card { padding: 1.25rem; }
-        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="badge">Week 25-2026</div>
-            <h1>Cybercrimeinfo Quiz</h1>
-            <p>13 juni t/m 19 juni 2026 &mdash; 20 meerkeuzevragen</p>
-        </header>
+<div class="container">
+    <header>
+        <div class="badge">Week 25 &bull; 2026</div>
+        <h1>Cybercrime Quiz</h1>
+        <p>Van een datalek bij Colruyt met honderdduizend klanten en het Amsterdamse merk Patta op een leaksite, tot een kritiek lek in SimpleHelp met de hoogst mogelijke ernstscore en Belgische overheidssites die onder vuur lagen. Hoeveel van het cybernieuws van 13 tot en met 19 juni heb jij meegekregen?</p>
+    </header>
 
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <div class="score-display">Score: <span id="scoreDisplay">0</span> / 20</div>
 
-        <div class="score-display">
-            Score: <span id="currentScore">0</span> / <span id="totalAnswered">0</span>
-        </div>
-
-        <div id="quizContainer"></div>
-
-        <div class="results" id="results">
-            <h2>Quiz voltooid!</h2>
-            <div class="final-score" id="finalScore">0 / 20</div>
-            <div class="message" id="resultMessage"></div>
-            <button class="btn-restart" onclick="restartQuiz()">Opnieuw spelen</button>
-        </div>
+    <div id="quizContainer"></div>
+    <div class="results" id="results">
+        <div class="result-score" id="finalScore"></div>
+        <div class="result-label" id="finalLabel"></div>
+        <div class="result-desc" id="finalDesc"></div>
+        <a href="https://www.ccinfo.nl" class="result-link">Meer cybercrime nieuws op ccinfo.nl</a>
     </div>
 
     <footer>
-        &copy; 2026 <a href="https://www.ccinfo.nl">Cybercrimeinfo</a> - Het cybercrime-platform van Nederland en Belgi&euml;
+        <p>Cybercrimeinfo Quiz WK25-2026 &bull; <a href="https://www.ccinfo.nl">ccinfo.nl</a> &bull; 21 juni 2026</p>
     </footer>
+</div>
 
-    <script>
-        const questions = [
-            {
-                q: "Het datalek bij de Belgische retailgroep Colruyt, dat medio juni 2026 bekend werd, trof hoeveel klanten?",
-                options: ["Ongeveer 100.000", "Ongeveer 50.000", "Ongeveer 250.000", "Ongeveer 1 miljoen"],
-                correct: 0,
-                explanation: "Bij Colruyt werden gegevens van ongeveer 100.000 klanten blootgelegd, waaronder klant-ID's, klantenkaartnummers, e-mailadressen en telefoonnummers."
-            },
-            {
-                q: "Welke ransomwaregroep zette het Amsterdamse streetwearmerk Patta op de eigen leaksite?",
-                options: ["The Gentlemen", "LockBit 5.0", "ShinyHunters", "INC Ransomware"],
-                correct: 1,
-                explanation: "Het Amsterdamse mode en streetwearmerk Patta, opgericht in 2004, werd door LockBit 5.0 vermeld als slachtoffer op de afpersingssite."
-            },
-            {
-                q: "Klachteninstituut Kifid oordeelde dat bank Knab een slachtoffer van bankhelpdeskfraude moet vergoeden. Om welk bedrag gaat het?",
-                options: ["13.000 euro", "47.000 euro", "Ruim 95.000 euro", "250.000 euro"],
-                correct: 2,
-                explanation: "Knab moet ruim 95.000 euro vergoeden. De oplichter liet het programma Quicksupport installeren, waarna er vijf betaalopdrachten werden gegeven."
-            },
-            {
-                q: "Het Nederlandse technologiebedrijf SigmaControl werd getroffen door een aanval met ransomware. Welke groep claimde die aanval?",
-                options: ["Qilin", "Akira", "Dark Storm Team", "thegentlemen"],
-                correct: 3,
-                explanation: "De aanval werd geclaimd door de cybercriminele groep die bekendstaat als 'thegentlemen'."
-            },
-            {
-                q: "Het Belgisch Centrum voor Cybersecurity waarschuwde voor CVE-2026-48558 in de software SimpleHelp. Welke CVSS-score kreeg deze kwetsbaarheid?",
-                options: ["10.0", "7.5", "8.7", "9.2"],
-                correct: 0,
-                explanation: "De authenticatie bypass in SimpleHelp kreeg CVSS-score 10.0, de hoogst mogelijke. De fout zit in de afhandeling van OIDC-authenticatie en is verholpen in versie 5.6.9."
-            },
-            {
-                q: "Hoeveel kwetsbaarheden dichtte Google in de nieuwste Chrome-update (versie 149)?",
-                options: ["11", "33", "26", "41"],
-                correct: 1,
-                explanation: "De Chrome-update verhielp 33 kwetsbaarheden, waarvan zeven als kritiek werden aangemerkt."
-            },
-            {
-                q: "De WordPress-plug-in Gravity SMTP werd op grote schaal misbruikt. Door hoeveel websites wordt deze plug-in naar schatting gebruikt?",
-                options: ["18.000", "15.000", "Ongeveer 100.000", "1,2 miljoen"],
-                correct: 2,
-                explanation: "Gravity SMTP draait op ongeveer 100.000 websites. Het beveiligingsbedrijf registreerde meer dan zeventien miljoen aanvalspogingen."
-            },
-            {
-                q: "In hoeveel landen werden de gelekte inloggegevens van Fortinet-firewalls (de FortiBleed-campagne) aangetroffen?",
-                options: ["42", "96", "150", "194"],
-                correct: 3,
-                explanation: "De gelekte gegevens omvatten 21.632 unieke domeinen en bestreken 194 landen."
-            },
-            {
-                q: "De malware Argamal, ontdekt door Kaspersky, is een Remote Access Trojan. Via welk kanaal verspreidt deze zich?",
-                options: ["Games voor volwassenen", "Gekraakte software", "Phishingmails", "Usb-sticks"],
-                correct: 0,
-                explanation: "Argamal verspreidt zich via gedownloade games voor volwassenen, ook wel hentai games genoemd, en werkt als een Remote Access Trojan."
-            },
-            {
-                q: "Microsoft waarschuwde voor een crypto clipper die zich via usb-sticks verspreidt. Welk netwerk gebruikt deze malware voor de communicatie?",
-                options: ["VPN", "Tor", "I2P", "Freenet"],
-                correct: 1,
-                explanation: "De malware verspreidt zich via snelkoppelingsbestanden (.lnk) op usb-drives en gebruikt het Tor-netwerk om met de aanvallers te communiceren."
-            },
-            {
-                q: "Hoeveel npm-packages van Mastra werden besmet met malware die gegevens steelt?",
-                options: ["15", "50", "Meer dan 140", "Meer dan 300"],
-                correct: 2,
-                explanation: "Meer dan 140 npm-packages van Mastra raakten geïnfecteerd. De malware richtte zich op 160 browserextensies voor cryptowallets."
-            },
-            {
-                q: "Hoeveel slachtoffers claimde de groep INC Ransomware sinds augustus 2023?",
-                options: ["120", "400", "Meer dan 1.500", "Meer dan 830"],
-                correct: 3,
-                explanation: "INC Ransomware claimde sinds augustus 2023 meer dan 830 slachtoffers, waarvan ruim 65 procent in de Verenigde Staten."
-            },
-            {
-                q: "Een 34-jarige man uit Amsterdam werd veroordeeld voor het oplichten van ABN Amro met deepfakes. Welke straf kreeg hij?",
-                options: ["2,5 jaar cel, waarvan zes maanden voorwaardelijk", "1 jaar cel", "21 maanden cel", "5 jaar cel"],
-                correct: 0,
-                explanation: "De man kreeg 2,5 jaar gevangenisstraf, waarvan zes maanden voorwaardelijk. Hij opende in totaal 47 bankrekeningen en omzeilde de identiteitsverificatie."
-            },
-            {
-                q: "De politie hield drie mannen uit Terneuzen aan voor phishingberichten. Welke instantie werd in die berichten nagebootst?",
-                options: ["ING", "De Belastingdienst", "PostNL", "DigiD"],
-                correct: 1,
-                explanation: "De berichten leken afkomstig van de Belastingdienst en gingen over een vermeende betalingsachterstand. De mannen waren 21, 22 en 30 jaar oud en de politie ontving elf aangiftes."
-            },
-            {
-                q: "Bij de internationale ontmanteling van het SocGholish-botnet werden hoeveel geïnfecteerde websites opgeschoond?",
-                options: ["1.400", "154.000", "Ongeveer 15.000", "100"],
-                correct: 2,
-                explanation: "Ongeveer 15.000 geïnfecteerde WordPress-sites werden opgeschoond. Bij de operatie lekten ook 154.000 e-mailadressen en meer dan een half miljoen wachtwoorden."
-            },
-            {
-                q: "Welke groep claimde DDoS-aanvallen op Belgische overheidswebsites zoals de FSMA en het FANC?",
-                options: ["NoName057(16)", "Killnet", "Anonymous Sudan", "Dark Storm Team"],
-                correct: 3,
-                explanation: "Dark Storm Team claimde DDoS-aanvallen op meerdere Belgische overheidsdiensten, waaronder de FSMA, de Kruispuntbank van de Sociale Zekerheid en het FANC."
-            },
-            {
-                q: "Hoe werd het Nederlandse ministerie van Financiën in maart 2026 gehackt?",
-                options: ["Via een zerodaylek", "Via een gestolen wachtwoord", "Via een phishingmail", "Via ransomware"],
-                correct: 0,
-                explanation: "De aanvallers maakten misbruik van een zerodaylek. De inbraak werd op 19 maart ontdekt en beveiligingsupdates kwamen pas op 27 maart beschikbaar."
-            },
-            {
-                q: "Hoeveel Nederlanders hebben het hogere DigiD-niveau (Substantieel of Hoog) geactiveerd, volgens de staatssecretaris?",
-                options: ["3 miljoen", "6 miljoen", "10 miljoen", "17 miljoen"],
-                correct: 1,
-                explanation: "Zes miljoen burgers hebben DigiD Substantieel of Hoog geactiveerd. Nog drie miljoen mensen loggen jaarlijks in via een sms-code, wat minder veilig is."
-            },
-            {
-                q: "Welk Europees agentschap coördineerde de grootschalige cybercrisisoefening Cyber Europe 2026?",
-                options: ["Europol", "Het NCSC", "ENISA", "Het CCB"],
-                correct: 2,
-                explanation: "De oefening werd gecoördineerd door ENISA, het Europese agentschap voor cyberbeveiliging, en vond plaats op 10 en 11 juni 2026."
-            },
-            {
-                q: "Hoeveel unieke wachtwoorden uit stealer logs werden medio juni 2026 toegevoegd aan Have I Been Pwned?",
-                options: ["56 miljoen", "500.000", "1 miljard", "124 miljoen"],
-                correct: 3,
-                explanation: "Er werden 124 miljoen wachtwoorden toegevoegd, naast 56 miljoen e-mailadressen. Van die e-mailadressen was 86 procent al via een eerder lek bekend."
-            }
-        ];
+<script>
+    const questions = [
+        {
+            q: "Het datalek bij de Belgische retailgroep Colruyt, dat medio juni 2026 bekend werd, trof hoeveel klanten?",
+            options: ["Ongeveer 100.000", "Ongeveer 50.000", "Ongeveer 250.000", "Ongeveer 1 miljoen"],
+            correct: 0,
+            explanation: "Bij Colruyt werden gegevens van ongeveer 100.000 klanten blootgelegd, waaronder klant-ID's, klantenkaartnummers, e-mailadressen en telefoonnummers."
+        },
+        {
+            q: "Welke ransomwaregroep zette het Amsterdamse streetwearmerk Patta op de eigen leaksite?",
+            options: ["The Gentlemen", "LockBit 5.0", "ShinyHunters", "INC Ransomware"],
+            correct: 1,
+            explanation: "Het Amsterdamse mode en streetwearmerk Patta, opgericht in 2004, werd door LockBit 5.0 vermeld als slachtoffer op de afpersingssite."
+        },
+        {
+            q: "Klachteninstituut Kifid oordeelde dat bank Knab een slachtoffer van bankhelpdeskfraude moet vergoeden. Om welk bedrag gaat het?",
+            options: ["13.000 euro", "47.000 euro", "Ruim 95.000 euro", "250.000 euro"],
+            correct: 2,
+            explanation: "Knab moet ruim 95.000 euro vergoeden. De oplichter liet het programma Quicksupport installeren, waarna er vijf betaalopdrachten werden gegeven."
+        },
+        {
+            q: "Het Nederlandse technologiebedrijf SigmaControl werd getroffen door een aanval met ransomware. Welke groep claimde die aanval?",
+            options: ["Qilin", "Akira", "Dark Storm Team", "thegentlemen"],
+            correct: 3,
+            explanation: "De aanval werd geclaimd door de cybercriminele groep die bekendstaat als 'thegentlemen'."
+        },
+        {
+            q: "Het Belgisch Centrum voor Cybersecurity waarschuwde voor CVE-2026-48558 in de software SimpleHelp. Welke CVSS-score kreeg deze kwetsbaarheid?",
+            options: ["10.0", "7.5", "8.7", "9.2"],
+            correct: 0,
+            explanation: "De authenticatie bypass in SimpleHelp kreeg CVSS-score 10.0, de hoogst mogelijke. De fout zit in de afhandeling van OIDC-authenticatie en is verholpen in versie 5.6.9."
+        },
+        {
+            q: "Hoeveel kwetsbaarheden dichtte Google in de nieuwste Chrome-update (versie 149)?",
+            options: ["11", "33", "26", "41"],
+            correct: 1,
+            explanation: "De Chrome-update verhielp 33 kwetsbaarheden, waarvan zeven als kritiek werden aangemerkt."
+        },
+        {
+            q: "De WordPress-plug-in Gravity SMTP werd op grote schaal misbruikt. Door hoeveel websites wordt deze plug-in naar schatting gebruikt?",
+            options: ["18.000", "15.000", "Ongeveer 100.000", "1,2 miljoen"],
+            correct: 2,
+            explanation: "Gravity SMTP draait op ongeveer 100.000 websites. Het beveiligingsbedrijf registreerde meer dan zeventien miljoen aanvalspogingen."
+        },
+        {
+            q: "In hoeveel landen werden de gelekte inloggegevens van Fortinet-firewalls (de FortiBleed-campagne) aangetroffen?",
+            options: ["42", "96", "150", "194"],
+            correct: 3,
+            explanation: "De gelekte gegevens omvatten 21.632 unieke domeinen en bestreken 194 landen."
+        },
+        {
+            q: "De malware Argamal, ontdekt door Kaspersky, is een Remote Access Trojan. Via welk kanaal verspreidt deze zich?",
+            options: ["Games voor volwassenen", "Gekraakte software", "Phishingmails", "Usb-sticks"],
+            correct: 0,
+            explanation: "Argamal verspreidt zich via gedownloade games voor volwassenen, ook wel hentai games genoemd, en werkt als een Remote Access Trojan."
+        },
+        {
+            q: "Microsoft waarschuwde voor een crypto clipper die zich via usb-sticks verspreidt. Welk netwerk gebruikt deze malware voor de communicatie?",
+            options: ["VPN", "Tor", "I2P", "Freenet"],
+            correct: 1,
+            explanation: "De malware verspreidt zich via snelkoppelingsbestanden (.lnk) op usb-drives en gebruikt het Tor-netwerk om met de aanvallers te communiceren."
+        },
+        {
+            q: "Hoeveel npm-packages van Mastra werden besmet met malware die gegevens steelt?",
+            options: ["15", "50", "Meer dan 140", "Meer dan 300"],
+            correct: 2,
+            explanation: "Meer dan 140 npm-packages van Mastra raakten geïnfecteerd. De malware richtte zich op 160 browserextensies voor cryptowallets."
+        },
+        {
+            q: "Hoeveel slachtoffers claimde de groep INC Ransomware sinds augustus 2023?",
+            options: ["120", "400", "Meer dan 1.500", "Meer dan 830"],
+            correct: 3,
+            explanation: "INC Ransomware claimde sinds augustus 2023 meer dan 830 slachtoffers, waarvan ruim 65 procent in de Verenigde Staten."
+        },
+        {
+            q: "Een 34-jarige man uit Amsterdam werd veroordeeld voor het oplichten van ABN Amro met deepfakes. Welke straf kreeg hij?",
+            options: ["2,5 jaar cel, waarvan zes maanden voorwaardelijk", "1 jaar cel", "21 maanden cel", "5 jaar cel"],
+            correct: 0,
+            explanation: "De man kreeg 2,5 jaar gevangenisstraf, waarvan zes maanden voorwaardelijk. Hij opende in totaal 47 bankrekeningen en omzeilde de identiteitsverificatie."
+        },
+        {
+            q: "De politie hield drie mannen uit Terneuzen aan voor phishingberichten. Welke instantie werd in die berichten nagebootst?",
+            options: ["ING", "De Belastingdienst", "PostNL", "DigiD"],
+            correct: 1,
+            explanation: "De berichten leken afkomstig van de Belastingdienst en gingen over een vermeende betalingsachterstand. De mannen waren 21, 22 en 30 jaar oud en de politie ontving elf aangiftes."
+        },
+        {
+            q: "Bij de internationale ontmanteling van het SocGholish-botnet werden hoeveel geïnfecteerde websites opgeschoond?",
+            options: ["1.400", "154.000", "Ongeveer 15.000", "100"],
+            correct: 2,
+            explanation: "Ongeveer 15.000 geïnfecteerde WordPress-sites werden opgeschoond. Bij de operatie lekten ook 154.000 e-mailadressen en meer dan een half miljoen wachtwoorden."
+        },
+        {
+            q: "Welke groep claimde DDoS-aanvallen op Belgische overheidswebsites zoals de FSMA en het FANC?",
+            options: ["NoName057(16)", "Killnet", "Anonymous Sudan", "Dark Storm Team"],
+            correct: 3,
+            explanation: "Dark Storm Team claimde DDoS-aanvallen op meerdere Belgische overheidsdiensten, waaronder de FSMA, de Kruispuntbank van de Sociale Zekerheid en het FANC."
+        },
+        {
+            q: "Hoe werd het Nederlandse ministerie van Financiën in maart 2026 gehackt?",
+            options: ["Via een zerodaylek", "Via een gestolen wachtwoord", "Via een phishingmail", "Via ransomware"],
+            correct: 0,
+            explanation: "De aanvallers maakten misbruik van een zerodaylek. De inbraak werd op 19 maart ontdekt en beveiligingsupdates kwamen pas op 27 maart beschikbaar."
+        },
+        {
+            q: "Hoeveel Nederlanders hebben het hogere DigiD-niveau (Substantieel of Hoog) geactiveerd, volgens de staatssecretaris?",
+            options: ["3 miljoen", "6 miljoen", "10 miljoen", "17 miljoen"],
+            correct: 1,
+            explanation: "Zes miljoen burgers hebben DigiD Substantieel of Hoog geactiveerd. Nog drie miljoen mensen loggen jaarlijks in via een sms-code, wat minder veilig is."
+        },
+        {
+            q: "Welk Europees agentschap coördineerde de grootschalige cybercrisisoefening Cyber Europe 2026?",
+            options: ["Europol", "Het NCSC", "ENISA", "Het CCB"],
+            correct: 2,
+            explanation: "De oefening werd gecoördineerd door ENISA, het Europese agentschap voor cyberbeveiliging, en vond plaats op 10 en 11 juni 2026."
+        },
+        {
+            q: "Hoeveel unieke wachtwoorden uit stealer logs werden medio juni 2026 toegevoegd aan Have I Been Pwned?",
+            options: ["56 miljoen", "500.000", "1 miljard", "124 miljoen"],
+            correct: 3,
+            explanation: "Er werden 124 miljoen wachtwoorden toegevoegd, naast 56 miljoen e-mailadressen. Van die e-mailadressen was 86 procent al via een eerder lek bekend."
+        },
+    ];
 
-        let score = 0;
-        let answered = 0;
+    let score = 0;
+    let answered = 0;
 
-        function buildQuiz() {
-            var container = document.getElementById('quizContainer');
-            container.innerHTML = '';
-            score = 0;
-            answered = 0;
-            updateScore();
+    function render() {
+        const container = document.getElementById('quizContainer');
+        container.innerHTML = questions.map((q, i) => `
+            <div class="question-card" id="card-${i}">
+                <div class="question-number">Vraag ${i + 1} van ${questions.length}</div>
+                <div class="question-text">${q.q}</div>
+                <div class="options">
+                    ${q.options.map((opt, j) => `
+                        <button class="option" id="opt-${i}-${j}" onclick="answer(${i}, ${j})">
+                            <span class="option-letter">${['A','B','C','D'][j]}</span>
+                            <span>${opt}</span>
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="explanation" id="exp-${i}">${q.explanation}</div>
+            </div>
+        `).join('');
+    }
 
-            questions.forEach(function(q, i) {
-                var card = document.createElement('div');
-                card.className = 'question-card';
-                card.id = 'q' + i;
+    function answer(qi, chosen) {
+        const q = questions[qi];
+        const buttons = document.querySelectorAll(`#card-${qi} .option`);
+        buttons.forEach(btn => btn.disabled = true);
 
-                var optionsHTML = q.options.map(function(opt, j) {
-                    var letters = ['A', 'B', 'C', 'D'];
-                    return '<div class="option" onclick="selectAnswer(' + i + ', ' + j + ')" id="q' + i + 'o' + j + '">' +
-                        '<span class="letter">' + letters[j] + '</span>' +
-                        '<span>' + opt + '</span>' +
-                    '</div>';
-                }).join('');
-
-                card.innerHTML = '<div class="question-number">Vraag ' + (i + 1) + ' van ' + questions.length + '</div>' +
-                    '<div class="question-text">' + q.q + '</div>' +
-                    '<div class="options">' + optionsHTML + '</div>' +
-                    '<div class="feedback" id="fb' + i + '"></div>';
-
-                container.appendChild(card);
-            });
+        if (chosen === q.correct) {
+            buttons[chosen].classList.add('correct');
+            score++;
+            document.getElementById('scoreDisplay').textContent = score;
+        } else {
+            buttons[chosen].classList.add('wrong');
+            buttons[q.correct].classList.add('correct');
         }
 
-        function selectAnswer(qIndex, oIndex) {
-            var q = questions[qIndex];
-            var card = document.getElementById('q' + qIndex);
+        document.getElementById(`exp-${qi}`).classList.add('visible');
+        answered++;
 
-            if (card.classList.contains('answered-correct') || card.classList.contains('answered-wrong')) return;
+        const pct = (answered / questions.length) * 100;
+        document.getElementById('progress').style.width = pct + '%';
 
-            var isCorrect = oIndex === q.correct;
-            answered++;
-            if (isCorrect) score++;
-
-            q.options.forEach(function(_, j) {
-                var opt = document.getElementById('q' + qIndex + 'o' + j);
-                opt.classList.add('disabled');
-                if (j === q.correct) opt.classList.add('correct');
-                if (j === oIndex && !isCorrect) opt.classList.add('wrong');
-            });
-
-            var fb = document.getElementById('fb' + qIndex);
-            fb.className = 'feedback show ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
-            fb.textContent = (isCorrect ? '✓ Goed! ' : '✗ Fout. ') + q.explanation;
-
-            card.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
-
-            updateScore();
-
-            if (answered === questions.length) {
-                setTimeout(showResults, 800);
-            }
+        if (answered === questions.length) {
+            setTimeout(showResults, 800);
         }
+    }
 
-        function updateScore() {
-            document.getElementById('currentScore').textContent = score;
-            document.getElementById('totalAnswered').textContent = answered;
-            document.getElementById('progressFill').style.width = ((answered / questions.length) * 100) + '%';
-        }
+    function showResults() {
+        document.getElementById('results').classList.add('visible');
+        document.getElementById('finalScore').textContent = score + '/20';
+        let label, desc;
+        if (score >= 18) { label = 'Uitstekend!'; desc = 'Je hebt het cybernieuws van week 25 op de voet gevolgd. Indrukwekkend!'; }
+        else if (score >= 14) { label = 'Goed gedaan!'; desc = 'Sterke prestatie. Je bent goed op de hoogte van de cybersecurity ontwikkelingen.'; }
+        else if (score >= 10) { label = 'Niet slecht!'; desc = 'Redelijke score. Volg ccinfo.nl dagelijks voor meer diepgang.'; }
+        else { label = 'Blijf oefenen!'; desc = 'De wereld van cybercrime verandert snel. Lees dagelijks mee op ccinfo.nl.'; }
+        document.getElementById('finalLabel').textContent = label;
+        document.getElementById('finalDesc').textContent = desc;
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    }
 
-        function showResults() {
-            var results = document.getElementById('results');
-            results.classList.add('show');
-
-            var pct = Math.round((score / questions.length) * 100);
-            document.getElementById('finalScore').textContent = score + ' / ' + questions.length;
-
-            var msg;
-            if (pct === 100) msg = 'Perfect! Je bent een echte cybercrime-expert!';
-            else if (pct >= 80) msg = 'Uitstekend! Je bent goed op de hoogte van het cybercrimenieuws.';
-            else if (pct >= 60) msg = 'Goed gedaan! Je kent het meeste nieuws van deze week.';
-            else if (pct >= 40) msg = 'Niet slecht, maar er valt nog wat te leren. Lees de artikelen op ccinfo.nl!';
-            else msg = 'Tijd om ccinfo.nl vaker te bezoeken! Volgende week beter.';
-
-            document.getElementById('resultMessage').textContent = msg;
-            results.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        function restartQuiz() {
-            document.getElementById('results').classList.remove('show');
-            buildQuiz();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        buildQuiz();
-    </script>
+    render();
+</script>
 </body>
 </html>
